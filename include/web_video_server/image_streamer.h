@@ -37,6 +37,7 @@ protected:
   bool inactive_;
   image_transport::Subscriber image_sub_;
   std::string topic_;
+  std::string filter_frame_id_;  
 };
 
 

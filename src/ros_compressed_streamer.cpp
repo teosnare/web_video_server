@@ -16,6 +16,13 @@ void RosCompressedStreamer::start() {
 }
 
 void RosCompressedStreamer::imageCallback(const sensor_msgs::CompressedImageConstPtr &msg) {
+ 
+  if (!filter_frame_id_.empty())
+  {
+	  if (filter_frame_id_.compare(msg->header.frame_id) != 0)
+		return;
+  }
+  
   try {
     std::string content_type;
     if(msg->format.find("jpeg") != std::string::npos) {

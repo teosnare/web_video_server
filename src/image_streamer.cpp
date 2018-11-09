@@ -9,6 +9,7 @@ ImageStreamer::ImageStreamer(const async_web_server_cpp::HttpRequest &request,
     request_(request), connection_(connection), nh_(nh), inactive_(false)
 {
   topic_ = request.get_query_param_value_or_default("topic", "");
+  filter_frame_id_ = request.get_query_param_value_or_default("frame_id", "");
 }
 
 ImageTransportImageStreamer::ImageTransportImageStreamer(const async_web_server_cpp::HttpRequest &request,
@@ -43,6 +44,12 @@ void ImageTransportImageStreamer::imageCallback(const sensor_msgs::ImageConstPtr
 {
   if (inactive_)
     return;
+    
+  if (!filter_frame_id_.empty())
+  {
+	  if (filter_frame_id_.compare(msg->header.frame_id) != 0)
+		return;
+  }
 
   cv::Mat img;
   try
